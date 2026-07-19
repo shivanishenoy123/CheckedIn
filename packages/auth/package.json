@@ -1,0 +1,24 @@
+{
+  "name": "@CheckedIn/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@CheckedIn/db": "workspace:*",
+    "@CheckedIn/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@CheckedIn/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

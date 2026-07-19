@@ -1,0 +1,3 @@
+{
+  "extends": "@CheckedIn/config/tsconfig.base.json"
+}
