@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@CheckedIn/auth": "workspace:*",
+    "@CheckedIn/db": "workspace:*",
     "@CheckedIn/env": "workspace:*",
     "@CheckedIn/ui": "workspace:*",
     "@swc/helpers": "^0.5.23",
