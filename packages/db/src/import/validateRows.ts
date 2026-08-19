@@ -1,39 +1,35 @@
-import { participantRowSchema, type ParticipantRow } from "./schema";
+import { registrationRowSchema, type RegistrationRow } from "./schema";
+import { mapColumns } from "./mapColumns";
 
-// What we hand back after checking every row: the clean ones, plus
-// a list of what went wrong on the bad ones (with the row number,
-// so the manager can find and fix it in their spreadsheet).
 export interface ValidationResult {
-  validRows: ParticipantRow[];
+  validRows: RegistrationRow[];
   errors: { row: number; message: string }[];
 }
 
 export function validateRows(rawRows: Record<string, string>[]): ValidationResult {
-  const validRows: ParticipantRow[] = [];
+  const validRows: RegistrationRow[] = [];
   const errors: { row: number; message: string }[] = [];
-  const seenStudentIds = new Set<string>();
+  const seenUsns = new Set<string>();
 
   rawRows.forEach((row, index) => {
-    const rowNumber = index + 2; // +2 because row 1 is headers, and people count from 1 not 0
+    const rowNumber = index + 2;
+    const mappedRow = mapColumns(row);
 
-    const result = participantRowSchema.safeParse(row);
+    const result = registrationRowSchema.safeParse(mappedRow);
 
     if (!result.success) {
       const firstIssue = result.error.issues[0];
-      errors.push({
-        row: rowNumber,
-        message: firstIssue ? firstIssue.message : "Invalid row",
-      });
+      errors.push({ row: rowNumber, message: firstIssue ? firstIssue.message : "Invalid row" });
       return;
     }
 
-    const studentId = result.data["Student ID"];
-    if (seenStudentIds.has(studentId)) {
-      errors.push({ row: rowNumber, message: `Duplicate Student ID: ${studentId}` });
+    const usn = result.data["USN"];
+    if (seenUsns.has(usn)) {
+      errors.push({ row: rowNumber, message: `Duplicate USN: ${usn}` });
       return;
     }
 
-    seenStudentIds.add(studentId);
+    seenUsns.add(usn);
     validRows.push(result.data);
   });
 

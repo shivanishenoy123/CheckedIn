@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseExcel } from "@CheckedIn/db/import/parseExcel";
+import { parseCSV } from "@CheckedIn/db/import/parseCSV";
 import { validateRows } from "@CheckedIn/db/import/validateRows";
 import { insertParticipants } from "@CheckedIn/db/import/insertParticipants";
 import type { ImportSummary } from "@CheckedIn/db/import/types";
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   const arrayBuffer = await file.arrayBuffer();
   const fileBuffer = Buffer.from(arrayBuffer);
 
-  const rawRows = parseExcel(fileBuffer);
+  const rawRows = parseCSV(fileBuffer);
   const { validRows, errors } = validateRows(rawRows);
   const { insertedCount } = await insertParticipants(validRows, eventId);
 
